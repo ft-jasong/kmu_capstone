@@ -1,3 +1,4 @@
+from curses.ascii import SP
 import pygame
 
 class Spritesheet(object):
@@ -29,12 +30,10 @@ class Spritesheet(object):
 				for x in range(image_count)]
 		return self.images_at(tups, colorkey)
 
-pygame.init()
-
 class Screen(object):
 	def __init__(self):
-		self.width = 624
-		self.height = 624
+		self.width = 520
+		self.height = 520
 
 	def set_display(self):
 		self.window = pygame.display.set_mode((self.width, self.height))
@@ -44,21 +43,29 @@ class Screen(object):
 		self.background = pygame.load(bg_path)
 		self.background = pygame.transform.scale(self.background, (self.width, self.height))
 
+class Tile(object):
+	def __init__(self, tile_path):
+		self.ss = Spritesheet(tile_path)
+		self.tiles = self.ss.load_strip((0, 0, 40, 40), 13, colorkey=None)
+		self.img = self.tiles[0]
+
+pygame.init()
+
 screen = Screen()
 screen.set_display()
 # screen.set_background("./asset/background/background.png")
 board = [[0] * 13 for _ in range(13)]
 clock = pygame.time.Clock()
-mapx = 0
-mapy = 0
-tile = pygame.image.load("./asset/map/")
 
+tile = Tile("./asset/map/map_camp_tile2.png")
 running = True
 while running:
-	dt = clock.tick(60)
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
 	for y in range(13):
 		for x in range(13):
-			screen.window.blit()
+			screen.window.blit(tile.img[1], (0, 0))
+			# screen.window.blit(tile.img, (x * 40, y * 40))
+			print([x, y])
+pygame.quit()
