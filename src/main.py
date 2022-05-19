@@ -1,5 +1,4 @@
 import pygame
-from pyparsing import Char
 from animation import CharacterAnimation
 import spritesheet as ss
 import os.path
@@ -12,10 +11,6 @@ class Screen(object):
 	def set_display(self):
 		self.window = pygame.display.set_mode((self.width, self.height))
 		pygame.display.set_caption("Copy Crazy Arcade")
-	
-	def set_background(self, bg_path):
-		self.background = pygame.load(bg_path)
-		self.background = pygame.transform.scale(self.background, (self.width, self.height))
 
 class Tile(object):
 	def __init__(self, tile_path):
@@ -40,6 +35,10 @@ asset_path = cur_path + '/../asset/'
 Character = CharacterAnimation('../asset/character/animation.png')
 img = Character.down_imgs[0]
 dir = None
+x_speed = 0
+y_speed = 0
+x_pos = 0
+y_pos = 0
 # test finished
 
 tile = Tile(asset_path + 'map/map_camp_tile2.png')
@@ -52,20 +51,53 @@ while running:
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
 				dir = Character.left_imgs
+				x_speed = -3
+				y_speed = 0
 			elif event.key == pygame.K_RIGHT:
 				dir = Character.right_imgs
+				x_speed = 3
+				y_speed = 0
 			elif event.key == pygame.K_UP:
 				dir = Character.up_imgs
+				x_speed = 0
+				y_speed = -3
 			elif event.key == pygame.K_DOWN:
 				dir = Character.down_imgs
+				x_speed = 0
+				y_speed = 3
 		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_UP:
+				if dir == Character.up_imgs:
+					y_speed = 0
+					x_speed = 0	
+			if event.key == pygame.K_DOWN:
+				if dir == Character.down_imgs:
+					y_speed = 0
+					x_speed = 0
+			if event.key == pygame.K_LEFT:
+				if dir == Character.left_imgs:
+					y_speed = 0
+					x_speed = 0
+			if event.key == pygame.K_RIGHT:
+				if dir == Character.right_imgs:
+					y_speed = 0
+					x_speed = 0
 			img = Character.down_imgs[0]
 			Character.img_idx = 0
 	for y in range(13):
 		for x in range(13):
 			screen.window.blit(tile.tiles[0], (x * 48, y * 48))
 	img = Character.animation(dir, 0.2)
-	screen.window.blit(img, (0, 0))
-	
+	x_pos += x_speed
+	y_pos += y_speed
+	if x_pos < 0:
+		x_pos = 0
+	if y_pos < 0:
+		y_pos = 0
+	if x_pos > 624 - 48:
+		x_pos = 624 - 48
+	if y_pos > 624 - 48:
+		y_pos = 624 - 58
+	screen.window.blit(img, (x_pos, y_pos))
 	pygame.display.update()
 pygame.quit()
