@@ -2,11 +2,12 @@ import pygame
 from animation import CharacterAnimation
 import spritesheet as ss
 import os.path
+import gameMap
 
 class Screen(object):
 	def __init__(self):
-		self.width = 624
-		self.height = 624
+		self.width = 600
+		self.height = 600
 
 	def set_display(self):
 		self.window = pygame.display.set_mode((self.width, self.height))
@@ -39,10 +40,10 @@ x_speed = 0
 y_speed = 0
 x_pos = 0
 y_pos = 0
+
+map = gameMap.Map()
 # test finished
 
-tile = Tile(asset_path + 'map/map_camp_tile2.png')
-# tile.resize_tile()
 running = True
 while running:
 	for event in pygame.event.get():
@@ -84,9 +85,20 @@ while running:
 					x_speed = 0
 			img = Character.down_imgs[0]
 			Character.img_idx = 0
-	for y in range(13):
-		for x in range(13):
-			screen.window.blit(tile.tiles[0], (x * 48, y * 48))
+	
+	# 타일 깔기
+	for y in range(15):
+		for x, tile_idx in enumerate(map.pirate.tile_board[y]):
+			screen.window.blit(map.pirate.tiles[tile_idx], (x * 40, y * 40))
+	# 블럭 깔기
+	for y in range(15):
+		for x in range(15):
+			if map.pirate.block_board[y][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y][x]][1], (x * 40, y * 40))
+			if y < 14 and map.pirate.block_board[y + 1][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y + 1][x]][0], (x * 40, y * 40 + 33))
+
+
 	img = Character.animation(dir, 0.2)
 	x_pos += x_speed
 	y_pos += y_speed
@@ -94,10 +106,10 @@ while running:
 		x_pos = 0
 	if y_pos < 0:
 		y_pos = 0
-	if x_pos > 624 - 48:
-		x_pos = 624 - 48
-	if y_pos > 624 - 48:
-		y_pos = 624 - 58
+	if x_pos > 600 - 48:
+		x_pos = 600 - 48
+	if y_pos > 600 - 48:
+		y_pos = 600 - 58
 	screen.window.blit(img, (x_pos, y_pos))
 	pygame.display.update()
 pygame.quit()
