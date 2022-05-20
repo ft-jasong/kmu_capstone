@@ -61,7 +61,7 @@ class Pirate(object):
 		block_normal.append(block_normal_sprite.image_at((1, 1, 40, 7), colorkey=-1))
 		block_normal.append(block_normal_sprite.image_at((1, 9, 40, 40), colorkey=-1))
 		block_box.append(block_box_sprite.image_at((0, 0, 40, 7), colorkey=-1))
-		block_box.append(block_box_sprite.image_at((0, 8, 40, 40), colorkey=-1))
+		block_box.append(block_box_sprite.image_at((0, 8, 40, 40), colorkey=None))
 		self.blocks.append(block_steel)
 		self.blocks.append(block_normal)
 		self.blocks.append(block_box)
