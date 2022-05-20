@@ -1,7 +1,7 @@
 import pygame
 from character import CharacterAnimation
 import os.path
-from gameMap import Map
+from gameMap import Map, Pirate
 import monster
 
 class Screen(object):
@@ -33,7 +33,7 @@ y_speed = 0
 x_pos = 0
 y_pos = 0
 
-map = Map()
+stage = Map()
 soilder = monster.Soilder(asset_path + 'monster/soilder_sprite.png')
 boss = monster.Boss(asset_path + 'monster/boss_sprite.png')
 # test finished
@@ -83,8 +83,9 @@ while running:
 	
 	# 타일 깔기
 	for y in range(13):
-		for x, tile_idx in enumerate(map.pirate.stage1_tile[y]):
-			screen.window.blit(map.pirate.tiles[tile_idx], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+		for x, tile_idx in enumerate(stage.pirate.stage1_tile[y]):
+			screen.window.blit(stage.pirate.tiles[tile_idx], 
+			(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
 	
 	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
 	img = Character.animation(dir, 0.2)
@@ -103,14 +104,18 @@ while running:
 	# 블럭 깔기
 	for y in range(13):
 		for x in range(15):
-			if map.pirate.stage1_block[y][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.stage1_block[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-			if y < 12 and map.pirate.stage1_block[y + 1][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.stage1_block[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
-	
-	boss_img = boss.animation(boss.move_imgs, 0.1)
-	screen.window.blit(boss_img, (200, 200 + boss.y_pos))
-	soilder_img = soilder.animation(soilder.move_imgs, 0.1)
+			if stage.pirate.stage1_block[y][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage1_block[y][x]]
+				screen.window.blit(block_list[1],
+				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+			if y < 12 and stage.pirate.stage1_block[y + 1][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage1_block[y + 1][x]]
+				screen.window.blit(block_list[0],
+				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 40 - block_list[2]))
+
+	boss_img = boss.animation(boss.die_imgs, 0.1)
+	screen.window.blit(boss_img, (100, 100 + boss.y_pos))
+	soilder_img = soilder.animation(soilder.die_imgs, 0.1)
 	screen.window.blit(soilder_img, (50, 50))
 
 	pygame.display.update()
