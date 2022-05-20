@@ -8,7 +8,7 @@ class Screen(object):
 	def __init__(self):
 		self.margin = 40
 		self.width = 600
-		self.height = 600
+		self.height = 520
 
 	def set_display(self):
 		self.window = pygame.display.set_mode((self.width + self.margin, self.height + self.margin))
@@ -40,6 +40,7 @@ boss = monster.Boss(asset_path + 'monster/boss_sprite.png')
 
 running = True
 while running:
+	dt = clock.tick(30)
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
@@ -81,8 +82,8 @@ while running:
 			Character.img_idx = 0
 	
 	# 타일 깔기
-	for y in range(15):
-		for x, tile_idx in enumerate(map.pirate.boss_tile[y]):
+	for y in range(13):
+		for x, tile_idx in enumerate(map.pirate.stage1_tile[y]):
 			screen.window.blit(map.pirate.tiles[tile_idx], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
 	
 	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
@@ -100,12 +101,12 @@ while running:
 	screen.window.blit(img, (x_pos, y_pos))
 
 	# 블럭 깔기
-	for y in range(15):
+	for y in range(13):
 		for x in range(15):
-			if map.pirate.boss_block[y][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.boss_block[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-			if y < 14 and map.pirate.boss_block[y + 1][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.boss_block[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
+			if map.pirate.stage1_block[y][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.stage1_block[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+			if y < 12 and map.pirate.stage1_block[y + 1][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.stage1_block[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
 	
 	boss_img = boss.animation(boss.move_imgs, 0.1)
 	screen.window.blit(boss_img, (200, 200 + boss.y_pos))
