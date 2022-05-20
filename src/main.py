@@ -1,26 +1,18 @@
 import pygame
 from animation import CharacterAnimation
-import spritesheet as ss
+from spritesheet import Spritesheet
 import os.path
-import gameMap
+from gameMap import Map
 
 class Screen(object):
 	def __init__(self):
+		self.margin = 40
 		self.width = 600
 		self.height = 600
 
 	def set_display(self):
-		self.window = pygame.display.set_mode((self.width, self.height))
+		self.window = pygame.display.set_mode((self.width + self.margin, self.height + self.margin))
 		pygame.display.set_caption("Copy Crazy Arcade")
-
-class Tile(object):
-	def __init__(self, tile_path):
-		self.ss = ss.Spritesheet(tile_path)
-		self.tiles = self.ss.load_strip((0, 0, 40, 40), 13, colorkey=None)
-		for i in range(len(self.tiles)):
-			self.tiles[i] = pygame.transform.scale(self.tiles[i], (48, 48))
-		self.img = self.tiles[0]
-
 pygame.init()
 
 screen = Screen()
@@ -32,7 +24,7 @@ asset_path = cur_path + '/../asset/'
 
 # for img test #
 
-# character_ss = ss.Spritesheet(asset_path + 'character/animation.png')
+# character_ss = Spritesheet(asset_path + 'character/animation.png')
 Character = CharacterAnimation('../asset/character/animation.png')
 img = Character.down_imgs[0]
 dir = None
@@ -41,7 +33,7 @@ y_speed = 0
 x_pos = 0
 y_pos = 0
 
-map = gameMap.Map()
+map = Map()
 # test finished
 
 running = True
@@ -89,16 +81,9 @@ while running:
 	# 타일 깔기
 	for y in range(15):
 		for x, tile_idx in enumerate(map.pirate.tile_board[y]):
-			screen.window.blit(map.pirate.tiles[tile_idx], (x * 40, y * 40))
-	# 블럭 깔기
-	for y in range(15):
-		for x in range(15):
-			if map.pirate.block_board[y][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y][x]][1], (x * 40, y * 40))
-			if y < 14 and map.pirate.block_board[y + 1][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y + 1][x]][0], (x * 40, y * 40 + 33))
-
-
+			screen.window.blit(map.pirate.tiles[tile_idx], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+	
+	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
 	img = Character.animation(dir, 0.2)
 	x_pos += x_speed
 	y_pos += y_speed
@@ -106,10 +91,20 @@ while running:
 		x_pos = 0
 	if y_pos < 0:
 		y_pos = 0
-	if x_pos > 600 - 48:
-		x_pos = 600 - 48
-	if y_pos > 600 - 48:
-		y_pos = 600 - 58
+	if x_pos > screen.width + screen.margin - 48:
+		x_pos = screen.width + screen.margin - 48
+	if y_pos > screen.height + screen.margin - 48:
+		y_pos = screen.width + screen.margin - 48
 	screen.window.blit(img, (x_pos, y_pos))
+	
+	# 블럭 깔기
+	for y in range(15):
+		for x in range(15):
+			if map.pirate.block_board[y][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+			if y < 14 and map.pirate.block_board[y + 1][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
+
+
 	pygame.display.update()
 pygame.quit()
