@@ -82,7 +82,7 @@ while running:
 	
 	# 타일 깔기
 	for y in range(15):
-		for x, tile_idx in enumerate(map.pirate.tile_board[y]):
+		for x, tile_idx in enumerate(map.pirate.boss_tile[y]):
 			screen.window.blit(map.pirate.tiles[tile_idx], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
 	
 	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
@@ -102,10 +102,10 @@ while running:
 	# 블럭 깔기
 	for y in range(15):
 		for x in range(15):
-			if map.pirate.block_board[y][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-			if y < 14 and map.pirate.block_board[y + 1][x] >= 0:
-				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
+			if map.pirate.boss_block[y][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.boss_block[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
+			if y < 14 and map.pirate.boss_block[y + 1][x] >= 0:
+				screen.window.blit(map.pirate.blocks[map.pirate.boss_block[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
 	
 	boss_img = boss.animation(boss.move_imgs, 0.1)
 	screen.window.blit(boss_img, (200, 200 + boss.y_pos))
