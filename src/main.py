@@ -1,8 +1,8 @@
 import pygame
-from animation import CharacterAnimation
-from spritesheet import Spritesheet
+from character import CharacterAnimation
 import os.path
 from gameMap import Map
+import monster
 
 class Screen(object):
 	def __init__(self):
@@ -34,6 +34,8 @@ x_pos = 0
 y_pos = 0
 
 map = Map()
+soilder = monster.Soilder(asset_path + 'monster/soilder_sprite.png')
+boss = monster.Boss(asset_path + 'monster/boss_sprite.png')
 # test finished
 
 running = True
@@ -96,7 +98,7 @@ while running:
 	if y_pos > screen.height + screen.margin - 48:
 		y_pos = screen.width + screen.margin - 48
 	screen.window.blit(img, (x_pos, y_pos))
-	
+
 	# 블럭 깔기
 	for y in range(15):
 		for x in range(15):
@@ -104,7 +106,11 @@ while running:
 				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y][x]][1], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
 			if y < 14 and map.pirate.block_board[y + 1][x] >= 0:
 				screen.window.blit(map.pirate.blocks[map.pirate.block_board[y + 1][x]][0], (screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 33))
-
+	
+	boss_img = boss.animation(boss.move_imgs, 0.1)
+	screen.window.blit(boss_img, (200, 200 + boss.y_pos))
+	soilder_img = soilder.animation(soilder.move_imgs, 0.1)
+	screen.window.blit(soilder_img, (50, 50))
 
 	pygame.display.update()
 pygame.quit()

@@ -23,7 +23,7 @@ class Soilder(object):
 		if imgs == None:
 			return self.move_imgs[0]
 		self.img_idx += speed
-		img = imgs[int(self.img_idx % len(imgs))]
+		img = imgs[int(self.img_idx) % len(imgs)]
 		return img
 		
 
@@ -35,23 +35,34 @@ class Boss(object):
 		self.hit_img = self.spritesheet.image_at((1, 1, 1, 1), colorkey=-1)
 		self.die_imgs = []
 		self.img_idx = 0
+		self.x_pos = 200
+		self.y_pos = 200
 		self.init_imgs()
 
 	def init_imgs(self):
+		# move img init
 		self.move_imgs.append(self.spritesheet.image_at((5, 145, 119, 110), colorkey=-1))
 		self.move_imgs.append(self.spritesheet.image_at((134, 150, 120, 105), colorkey=-1))
-		self.move_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		self.move_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		self.move_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		####################ATTACK IMGS##############################
-		self.attack_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		self.attack_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		self.attack_imgs.append(self.spritesheet.image_at((), colorkey=-1))
-		self.attack_imgs.append(self.spritesheet.image_at((), colorkey=-1))
+		self.move_imgs.append(self.spritesheet.image_at((271, 152, 118, 102), colorkey=-1))
+		self.move_imgs.append(self.spritesheet.image_at((415, 130, 118, 125), colorkey=-1))
+		self.move_imgs.append(self.spritesheet.image_at((551, 129, 118, 125), colorkey=-1))
+		self.move_imgs.append(self.spritesheet.image_at((5, 269, 118, 125), colorkey=-1))
+		# attack img init
+		self.attack_imgs.append(self.spritesheet.image_at((5, 586, 118, 102), colorkey=-1))
+		self.attack_imgs.append(self.spritesheet.image_at((151, 563, 118, 125), colorkey=-1))
+		self.attack_imgs.append(self.spritesheet.image_at((362, 563, 118, 125), colorkey=-1))
+		self.attack_imgs.append(self.spritesheet.image_at((443, 560, 118, 125), colorkey=-1))
+		self.attack_imgs.append(self.spritesheet.image_at((588, 578, 120, 105), colorkey=-1))
+		# hit image init
+		self.hit_img = self.spritesheet.image_at((7, 407, 118, 140), colorkey=-1)
 
 	def animation(self, imgs, speed):
 		if imgs == None:
-			return self.down_imgs[0]
+			return self.move_imgs[0]
 		self.img_idx += speed
+		if int(self.img_idx) % 6 == 3 or int (self.img_idx) % 6 == 4:
+			self.y_pos -= 3
+		elif int(self.img_idx % 6) == 5:
+			self.y_pos += 6
 		img = imgs[int(self.img_idx % len(imgs))]
 		return img
