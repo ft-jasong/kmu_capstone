@@ -34,7 +34,7 @@ class Pirate(object):
 			[-1, 0, 1, -1, -1, 2, -1, -1, -1, 2, -1, -1, 1, 0, -1],
 			[-1, 0, 1, -1, -1, 2, -1, -1, -1, 2, -1, -1, 1, 0, -1],
 			[-1, 0, 0, 0, 0, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1],
-			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, 8, -1, -1, -1, -1, -1, -1, -1],
 			[-1, 0, 0, 2, 2, 0, -1, -1, -1, 0, 2, 2, 0, 0, -1],
 			[-1, 0, 1, 1, 1, 0, -1, -1, -1, 0, 1, 1, 1, 0, -1],
 			[-1, 0, 1, -1, -1, 0, -1, -1, -1, 0, -1, -1, 1, 0, -1],
@@ -42,8 +42,36 @@ class Pirate(object):
 			[-1, 0, 0, 0, 0, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1],
 			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 		]
-		self.stage2_tile = []
-		self.stage2_block = []
+		self.stage2_tile = [
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+			[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+		]
+		self.stage2_block = [
+			[-1, -1, +1, -1, +1, -1, -1, -1, -1, -1, +1, -1, +1, -1, -1],
+			[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+			[-1, -1, +3, -1, +2, -1, -1, -1, -1, -1, +2, -1, +3, -1, -1],
+			[-1, -1, +4, -1, +2, -1, -1, -1, -1, -1, +2, -1, +4, -1, -1],
+			[-1, -1, +5, +1, +2, +2, +2, +2, +2, +2, +2, +1, +5, -1, -1],
+			[-1, -1, +6, -1, -1, -1, -1, -1, -1, -1, -1, -1, +6, -1, -1],
+			[-1, -1, +7, +1, +8, +8, +8, +8, +8, +8, +8, +1, +7, -1, -1],
+			[-1, -1, +5, -1, -1, -1, -1, -1, -1, -1, -1, -1, +5, -1, -1],
+			[-1, -1, +4, +1, -1, -1, -1, -1, -1, -1, -1, +1, +4, -1, -1],
+			[-1, -1, +3, -1, -1, -1, -1, -1, -1, -1, -1, -1, +3, -1, -1],
+			[-1, -1, -1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, -1, -1],
+			[-1, -1, -1, -1, +1, -1, -1, -1, -1, -1, +1, -1, -1, -1, -1],
+			[-1, -1, -1, -1, -1, +1, +3, +4, +3, +1, -1, -1, -1, -1, -1],
+		]
 		self.boss_tile = [
 			[3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3],
 			[3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3],
@@ -92,6 +120,7 @@ class Pirate(object):
 		block_green = []
 		block_orange = []
 		block_red = []
+		block_turtle = []
 		block_steel.append(block_steel_sprite.image_at((0, 0, 40, 7), colorkey=-1))
 		block_steel.append(block_steel_sprite.image_at((0, 7, 40, 40), colorkey=-1))
 		block_steel.append(int(7))
@@ -101,29 +130,33 @@ class Pirate(object):
 		block_box.append(block_box_sprite.image_at((0, 0, 40, 7), colorkey=-1))
 		block_box.append(block_box_sprite.image_at((0, 8, 40, 40), colorkey=None))
 		block_box.append(int(7))
-		block_pole.append(block_box_sprite.image_at((0, 0, 40, 7), colorkey=-1))
-		block_pole.append()
+		block_pole.append(block_stage2_sprite.image_at((280, 94, 40, 26), colorkey=-1))
+		block_pole.append(block_stage2_sprite.image_at((280, 120, 40, 40), colorkey=-1))
 		block_pole.append(26)
-		block_blue.append()
-		block_blue.append()
-		block_blue.append(19)
-		block_green.append()
-		block_green.append()
-		block_green.append(19)
-		block_orange.append()
-		block_orange.append()
-		block_orange.append(19)
-		block_red.append()
-		block_red.append()
-		block_red.append(19)
-		self.blocks.append(block_steel)
-		self.blocks.append(block_normal)
-		self.blocks.append(block_box)
-		self.blocks.append(block_pole)
-		self.blocks.append(block_blue)
-		self.blocks.append(block_green)
-		self.blocks.append(block_orange)
-		self.blocks.append(block_red)
+		block_blue.append(block_stage2_sprite.image_at((440, 100, 40, 18), colorkey=-1))
+		block_blue.append(block_stage2_sprite.image_at((440, 118, 40, 40), colorkey=-1))
+		block_blue.append(18)
+		block_green.append(block_stage2_sprite.image_at((480, 100, 40, 18), colorkey=-1))
+		block_green.append(block_stage2_sprite.image_at((480, 118, 40, 40), colorkey=-1))
+		block_green.append(18)
+		block_orange.append(block_stage2_sprite.image_at((520, 100, 40, 18), colorkey=-1))
+		block_orange.append(block_stage2_sprite.image_at((520, 118, 40, 40), colorkey=-1))
+		block_orange.append(18)
+		block_red.append(block_stage2_sprite.image_at((560, 100, 40, 18), colorkey=-1))
+		block_red.append(block_stage2_sprite.image_at((560, 118, 40, 40), colorkey=-1))
+		block_red.append(18)
+		block_turtle.append(block_stage2_sprite.image_at((521, 22, 40, 16), colorkey=-1))
+		block_turtle.append(block_stage2_sprite.image_at((521, 38, 40, 40), colorkey=-1))
+		block_turtle.append(16)
+		self.blocks.append(block_steel) # NUM 0
+		self.blocks.append(block_normal) # NUM 1
+		self.blocks.append(block_box) # NUM 2
+		self.blocks.append(block_pole) # NUM 3
+		self.blocks.append(block_blue) # NUM 4
+		self.blocks.append(block_green) # NUM 5
+		self.blocks.append(block_orange) # NUM 6
+		self.blocks.append(block_red) # NUM 7
+		self.blocks.append(block_turtle) # NUM 8
 
 # Block 클래스 하나 사용해도 괜찮을것 같음. 이 밑은 테스트용 클래스. Map 내부에서 list로 사용하는 것과 비교해서 사용 예정.
 

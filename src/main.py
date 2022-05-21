@@ -83,7 +83,7 @@ while running:
 	
 	# 타일 깔기
 	for y in range(13):
-		for x, tile_idx in enumerate(stage.pirate.stage1_tile[y]):
+		for x, tile_idx in enumerate(stage.pirate.stage2_tile[y]):
 			screen.window.blit(stage.pirate.tiles[tile_idx], 
 			(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
 	
@@ -104,12 +104,12 @@ while running:
 	# 블럭 깔기
 	for y in range(13):
 		for x in range(15):
-			if stage.pirate.stage1_block[y][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage1_block[y][x]]
+			if stage.pirate.stage2_block[y][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y][x]]
 				screen.window.blit(block_list[1],
 				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-			if y < 12 and stage.pirate.stage1_block[y + 1][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage1_block[y + 1][x]]
+			if y < 12 and stage.pirate.stage2_block[y + 1][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y + 1][x]]
 				screen.window.blit(block_list[0],
 				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 40 - block_list[2]))
 
