@@ -12,7 +12,7 @@ class Screen(object):
 		self.height = 520
 
 	def set_display(self):
-		self.window = pygame.display.set_mode((self.width + self.margin, self.height + self.margin))
+		self.window = pygame.display.set_mode((self.width, self.height))
 		pygame.display.set_caption("Copy Crazy Arcade")
 pygame.init()
 
@@ -88,8 +88,19 @@ while running:
 	for y in range(13):
 		for x, tile_idx in enumerate(stage.pirate.stage2_tile[y]):
 			screen.window.blit(stage.pirate.tiles[tile_idx], 
-			(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-	
+			(x * 40, y * 40))
+
+	# 블럭 깔기
+	for y in range(13):
+		for x in range(15):
+			if stage.pirate.stage2_block[y][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y][x]]
+				screen.window.blit(block_list[1],
+				(x * 40, y * 40))
+			if y < 12 and stage.pirate.stage2_block[y + 1][x] >= 0:
+				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y + 1][x]]
+				screen.window.blit(block_list[0],
+				(x * 40, y * 40 + 40 - block_list[2]))
 	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
 	img = Character.animation(dir, 0.2)
 	x_pos += x_speed
@@ -98,24 +109,11 @@ while running:
 		x_pos = 0
 	if y_pos < 0:
 		y_pos = 0
-	if x_pos > screen.width + screen.margin - 48:
-		x_pos = screen.width + screen.margin - 48
-	if y_pos > screen.height + screen.margin - 48:
-		y_pos = screen.width + screen.margin - 48
+	if x_pos > screen.width - 40:
+		x_pos = screen.width - 40
+	if y_pos > screen.height - 40:
+		y_pos = screen.width - 40
 	screen.window.blit(img, (x_pos, y_pos))
-
-	# 블럭 깔기
-	for y in range(13):
-		for x in range(15):
-			if stage.pirate.stage2_block[y][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y][x]]
-				screen.window.blit(block_list[1],
-				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40))
-			if y < 12 and stage.pirate.stage2_block[y + 1][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y + 1][x]]
-				screen.window.blit(block_list[0],
-				(screen.margin // 2 + x * 40, screen.margin // 2 + y * 40 + 40 - block_list[2]))
-
 	boss_img = boss.animation(boss.die_imgs, 0.1)
 	screen.window.blit(boss_img, (100, 100 + boss.y_pos))
 	soilder_img = soilder.animation(soilder.die_imgs, 0.1)

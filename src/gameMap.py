@@ -106,7 +106,6 @@ class Pirate(object):
 		]
 		self.init_blocks()
 
-
 	def init_blocks(self):
 		block_steel_sprite = Spritesheet(self.map_path + 'map_pirate_block_steel.png')
 		block_normal_sprite = Spritesheet(self.map_path + 'map_pirate_object1.png')

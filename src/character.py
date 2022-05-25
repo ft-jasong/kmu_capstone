@@ -3,17 +3,6 @@ import spritesheet as ss
 import os.path
 
 class CharacterAnimation(object):
-	def __init__(self, rel_path):
-		self.cur_dir = os.path.dirname(__file__)
-		self.img_path = self.cur_dir + '/' + rel_path
-		self.sprite_img = ss.Spritesheet(self.img_path)
-		self.up_imgs = []
-		self.down_imgs = []
-		self.left_imgs = []
-		self.right_imgs = []
-		self.img_idx = 0
-		self.init_all_imgs()
-
 	def init_up_imgs(self):
 		self.up_imgs.append(self.sprite_img.image_at((438, 1, 44, 56), colorkey= -1))
 		self.up_imgs.append(self.sprite_img.image_at((587, 59, 44, 55), colorkey= -1))
@@ -47,9 +36,36 @@ class CharacterAnimation(object):
 		self.init_down_imgs()
 		self.init_left_imgs()
 
+	def __init__(self, rel_path):
+		self.cur_dir = os.path.dirname(__file__)
+		self.img_path = self.cur_dir + '/' + rel_path
+		self.sprite_img = ss.Spritesheet(self.img_path)
+		self.up_imgs = []
+		self.down_imgs = []
+		self.left_imgs = []
+		self.right_imgs = []
+		self.img_idx = 0
+		self.x_pos = 0
+		self.y_pos = 0
+		self.speed = 3
+		self.init_all_imgs()
+
 	def animation(self, imgs, speed):
 		if imgs == None:
 			return self.down_imgs[0]
 		self.img_idx += speed
-		character_img = imgs[int(self.img_idx % 6)]
+		character_img = imgs[int(self.img_idx % len(imgs))]
 		return character_img
+
+	# def character_move(self, key_state, speed, dir):
+	# 	if key_state == pygame.KEYDOWN:
+	# 		if dir == 'left':
+	# 			self.x_
+	# 	if key_state == pygame.KEYUP:
+	# 		pass
+
+	def default_character_state(self):
+		self.img_idx = 0
+		self.x_pos = 0
+		self.y_pos = 0
+		self.speed = 3

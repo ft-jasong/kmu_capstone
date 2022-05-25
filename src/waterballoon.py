@@ -97,6 +97,7 @@ class Explode():
 		# # right image init		
 		self.explode_right = [pygame.transform.rotate(img, 90) for img in self.explode_up]
 		self.explode_right_info = [size for size in self.explode_up_info]
+	
 	def animation(self, imgs, speed):
 		if imgs == None:
 			print('waterballoon image animation imgs is NULL')
