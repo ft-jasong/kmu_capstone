@@ -3,6 +3,7 @@ from character import CharacterAnimation
 import os.path
 from gameMap import Map, Pirate
 import monster
+from waterballoon import Bomb, Explode
 
 class Screen(object):
 	def __init__(self):
@@ -36,6 +37,8 @@ y_pos = 0
 stage = Map()
 soilder = monster.Soilder(asset_path + 'monster/soilder_sprite.png')
 boss = monster.Boss(asset_path + 'monster/boss_sprite.png')
+bomb = Bomb()
+explode = Explode()
 # test finished
 
 running = True
@@ -117,6 +120,11 @@ while running:
 	screen.window.blit(boss_img, (100, 100 + boss.y_pos))
 	soilder_img = soilder.animation(soilder.die_imgs, 0.1)
 	screen.window.blit(soilder_img, (50, 50))
-
+	bomb_img = bomb.animation(bomb.bomb_imgs, 0.1)
+	screen.window.blit(bomb_img, (200, 200))
+	explode_up = explode.animation(explode.explode_up, 0.1)
+	screen.window.blit(explode_up, (100, 200))
+	explode_down = explode.animation(explode.explode_down, 0.1)
+	screen.window.blit(explode_down, (50, 200))
 	pygame.display.update()
 pygame.quit()

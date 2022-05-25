@@ -69,11 +69,5 @@ class Boss(object):
 		if imgs == None:
 			return self.move_imgs[0]
 		self.img_idx += speed
-		# if int(self.img_idx) % len(imgs) == 3 or int (self.img_idx) % 6 == 4:
-		# 	self.y_pos -= 3
-		# elif int(self.img_idx % len(imgs)) == 5:
-		# 	self.y_pos += 6
-		if self.img_idx % len(imgs) == 0:
-			self.y_pos -= 76
 		img = imgs[int(self.img_idx) % len(imgs)]
 		return img
