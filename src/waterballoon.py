@@ -19,18 +19,18 @@ class Bomb():
 		self.img_idx = 0
 
 	def init_balloon_imgs(self):
-		bomb1_img = pygame.image.load(img_path + 'bomb1.png')
+		bomb1_img = pygame.image.load(img_path + 'bomb1.png').convert()
 		self.bomb_imgs.append(image_colorkey(bomb1_img, (0, 0, 40, 40), -1))
 		self.bomb_imgs_info.append((40, 40))
-		bomb2_img = pygame.image.load(img_path + 'bomb2.png')
+		bomb2_img = pygame.image.load(img_path + 'bomb2.png').convert()
 		self.bomb_imgs.append(image_colorkey(bomb2_img, (0, 0, 40, 40), -1))
 		self.bomb_imgs_info.append((40, 40))
-		bomb1_img = pygame.image.load(img_path + 'bomb1.png')
+		bomb1_img = pygame.image.load(img_path + 'bomb1.png').convert()
 		self.bomb_imgs.append(image_colorkey(bomb1_img, (0, 0, 40, 40), -1))
-		bomb3_img = pygame.image.load(img_path + 'bomb3.png')
+		bomb3_img = pygame.image.load(img_path + 'bomb3.png').convert()
 		self.bomb_imgs.append(image_colorkey(bomb3_img, (0, 10, 50, 40), -1)) # bomb3 image가 10 * 10만큼 더 큼
 		self.bomb_imgs_info.append((50, 40))
-		bomb_shadow = pygame.image.load(img_path + 'bomb4.png')
+		bomb_shadow = pygame.image.load(img_path + 'bomb4.png').convert()
 		self.bomb_shadow = image_colorkey(bomb_shadow, (0, 0, 40, 40), -1)
 
 	def animation(self, imgs, speed):
@@ -59,29 +59,29 @@ class Explode():
 
 	def init_explode_imgs(self):
 		# center image init
-		exp_center_img0 = pygame.image.load(img_path + 'explosion00.png')
+		exp_center_img0 = pygame.image.load(img_path + 'explosion00.png').convert()
 		self.explode_center.append(image_colorkey(exp_center_img0, (0, 0, 40, 40)))
 		self.explode_center_info.append((40, 40))
-		exp_center_img1 = pygame.image.load(img_path + 'explosion01.png')
+		exp_center_img1 = pygame.image.load(img_path + 'explosion01.png').convert()
 		self.explode_center.append(image_colorkey(exp_center_img1, (0, 0, 40, 40)))
 		self.explode_center_info.append((40, 40))
-		exp_center_img2 = pygame.image.load(img_path + 'explosion02.png')
+		exp_center_img2 = pygame.image.load(img_path + 'explosion02.png').convert()
 		self.explode_center.append(image_colorkey(exp_center_img2, (0, 0, 40, 40)))
 		self.explode_center_info.append((40, 40))
 		# up image init
-		exp_up_img0 = pygame.image.load(img_path + 'explosion10.png')
+		exp_up_img0 = pygame.image.load(img_path + 'explosion10.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img0, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
-		exp_up_img1 = pygame.image.load(img_path + 'explosion11.png')
+		exp_up_img1 = pygame.image.load(img_path + 'explosion11.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img1, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
-		exp_up_img2 = pygame.image.load(img_path + 'explosion12.png')
+		exp_up_img2 = pygame.image.load(img_path + 'explosion12.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img2, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
-		exp_up_img3 = pygame.image.load(img_path + 'explosion13.png')
+		exp_up_img3 = pygame.image.load(img_path + 'explosion13.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img3, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
-		exp_up_img4 = pygame.image.load(img_path + 'explosion15.png')
+		exp_up_img4 = pygame.image.load(img_path + 'explosion15.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img4, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
 		
