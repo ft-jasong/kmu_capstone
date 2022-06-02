@@ -52,7 +52,10 @@ while running:
 				dir = 'down'
 				character.move_flag = True
 			if event.key == pygame.K_SPACE:
-				bombs.append([Bomb(), character.balloon_pos()])
+				bomb_pos = character.balloon_pos()
+				if stage.stages[1][1][bomb_pos[1] // 40][bomb_pos[0] // 40] == -1:
+					bombs.append([Bomb(), bomb_pos])
+					stage.stages[1][1][bomb_pos[1] // 40][bomb_pos[0] // 40] = 10
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_SPACE:
 				pass
@@ -84,26 +87,31 @@ while running:
 	# bomb 깔기
 	for b in bombs:
 		if b[0].img_idx > 7:
+			stage.stages[1][1][b[1][1] // 40][b[1][0] // 40] = -1
 			bombs.pop(0)
 		else:
 			screen.window.blit(b[0].animation(bomb.bomb_imgs, 0.1), b[1])
 	# 블럭 깔기
 	for y in range(13):
 		for x in range(15):
-			if stage.pirate.stage2_block[y][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y][x]]
+			if 0 <= stage.stages[1][1][y][x] < 10:
+				block_list = stage.pirate.blocks[stage.stages[1][1][y][x]]
 				screen.window.blit(block_list[1],
 				(x * 40 + screen.margin // 2, y * 40 + screen.margin // 2))
-			if y < 12 and stage.pirate.stage2_block[y + 1][x] >= 0:
-				block_list = stage.pirate.blocks[stage.pirate.stage2_block[y + 1][x]]
-				screen.window.blit(block_list[0],
-				(x * 40 + screen.margin // 2, y * 40 + 40 - block_list[2] + screen.margin // 2))
+			
 	
 	# 캐릭터 애니메이션 -> 캐릭터가 블럭 뒤에 blit 되어야 하는데, 일단 편의상 이렇게 놔둠. 수정 필요.
 	img = character.animation(0.2, dir)
 	character.move_position(dir, 1)
 	screen.window.blit(img, (character.x_pos, character.y_pos - 10)) # y pos 는 margin - 10 으로 해야함.
 	
+	for y in range(13):
+		for x in range(15):
+			if y < 12 and 0 <= stage.stages[1][1][y + 1][x] < 10:
+				block_list = stage.pirate.blocks[stage.stages[1][1][y + 1][x]]
+				screen.window.blit(block_list[0],
+				(x * 40 + screen.margin // 2, y * 40 + 40 - block_list[2] + screen.margin // 2))
+
 	# explode 구현
 	# explode_up = explode.animation(explode.explode_up, 0.1)
 	# screen.window.blit(explode_up, (100, 200))

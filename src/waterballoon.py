@@ -1,7 +1,7 @@
 import pygame
-from spritesheet import Spritesheet
-from image import image_colorkey, image_info
+from image import image_colorkey
 import os.path
+from gameMap import Map
 
 cur_path = os.path.dirname(__file__)
 img_path = cur_path + '/../asset/Bomb/'
