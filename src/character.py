@@ -97,6 +97,13 @@ class CharacterAnimation(object):
 	# 				return True
 
 	def move_position(self, dir, stage_num):
+		half_margin = Screen.margin // 2
+		cur_rect = (
+			self.x_pos - half_margin, self.y_pos + 10 - half_margin,
+			self.x_pos + 39 - half_margin, self.y_pos + 18 + 32 - half_margin
+			)
+		self.center_x = (cur_rect[0] + cur_rect[2]) / 2
+		self.center_y = (cur_rect[1] + cur_rect[3]) / 2
 		if self.move_flag is True:
 			if dir == 'left':
 				if self.isMoveable(dir, Map.stages[stage_num][1]):
@@ -170,7 +177,10 @@ class CharacterAnimation(object):
 				if center_x > 0 and blocks[center_y][center_x] == 10:
 					print('center x : %d | center y : %d' %(center_x, center_y))
 					print('pass')
-					return True
+					if blocks[left_y][left_x] == -1:
+						return True
+					else:
+						return False
 				elif cur_rect[0] + half_margin <= half_margin - 1 or left_x >= 15:
 					print('hello world')
 					return False
@@ -182,10 +192,10 @@ class CharacterAnimation(object):
 				if cur_rect[2] + half_margin <= half_margin + Screen.width and right_x < 15:
 					print("right x : %d | right y : %d | block : %d" %(right_x, right_y, blocks[right_y][right_x]))
 				if center_x < 14 and blocks[center_y][center_x] == 10:
-					if blocks[center_y][center_x + 1] != -1:
-						return False
-					else:
+					if blocks[right_y][right_x] == -1:
 						return True
+					else:
+						return False
 				elif cur_rect[2] >= half_margin + Screen.width or right_x >= 15:
 					return False
 				elif blocks[right_y][right_x] != -1:
@@ -197,10 +207,10 @@ class CharacterAnimation(object):
 				if cur_rect[1] + half_margin >= half_margin - 1 and up_y < 13:
 					print("up x : %d | up y : %d | block : %d" %(up_x, up_y, blocks[up_y][up_x]))
 				if center_y > 0 and blocks[center_y][center_x] == 10:
-					if blocks[center_y - 1][center_x] != -1:
-						return False
-					else:
+					if blocks[up_y][up_x] == -1:
 						return True
+					else:
+						return False
 				if cur_rect[1] + half_margin <= half_margin - 1 or up_y >= 13:
 					return False
 				elif blocks[up_y][up_x] != -1:
@@ -211,10 +221,10 @@ class CharacterAnimation(object):
 				if cur_rect[3] + half_margin <= half_margin + Screen.width and down_y < 13:
 					print("down x : %d | down y : %d | block : %d" %(down_x, down_y, blocks[down_y][down_x]))
 				if center_y < 12 and blocks[center_y][center_x] == 10:
-					if blocks[center_y + 1][center_x] != -1:
-						return False
-					else:
+					if blocks[down_y][down_x] == -1:
 						return True
+					else:
+						return False
 				if cur_rect[3] + half_margin >= half_margin + Screen.width or down_y >= 13:
 					return False
 				elif blocks[down_y][down_x] != -1:
