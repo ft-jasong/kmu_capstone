@@ -1,4 +1,6 @@
 from spritesheet import Spritesheet
+import random
+from item import *
 import os.path
 
 class Pirate(object):
@@ -163,7 +165,8 @@ class Map(object):
 	def __init__(self):
 		self.pirate = Pirate()
 
-
+	def block_colide(self, stage_num, x_pos, y_pos):
+		self.stages[stage_num][1][y_pos][x_pos] = random.randrange(80, 84) 
 # Block 클래스 하나 사용해도 괜찮을것 같음. 이 밑은 테스트용 클래스. Map 내부에서 list로 사용하는 것과 비교해서 사용 예정.
 
 # class Block(object):
