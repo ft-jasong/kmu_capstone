@@ -115,7 +115,7 @@ while running:
 	# 폭발 처리
 	for i in range(len(explosions)):
 		screen.window.blit(explosions[1].explode_center[0], (explosions[0][1][0] * 40, explosions[0][1][1] * 40))
-		if explode.explode_time > 100:
+		if explosions[1].explode_time > 100:
 			explosions.pop(0)
 		else:
 			for y in range(explosions[0][1][1] - 1, explosions[0][1][1] - explosions[0][0][0]):
