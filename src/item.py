@@ -12,9 +12,9 @@ class Pirate_Item(object):
 		self.cur_path = os.path.dirname(__file__)
 		self.item_path = self.cur_path + '/../asset/item/'
 		self.items = []
-		'''
-		0 = 물풍선, 1 = 신발, 2 = 물줄기, 3 = 보라풍선 
-		'''
+		# '''
+		# 0 = 물풍선, 1 = 신발, 2 = 물줄기, 3 = 보라풍선 
+		# '''
 		self.init_items()
 
 	def init_items(self):

@@ -84,29 +84,37 @@ class Explode():
 			print('this is for up')
 			if y < 0:
 				break
-			elif Map.stages[stage_num][1][y][x_pos] != -1:
+			elif Map.stages[stage_num][1][y][x_pos] > -1:
 				if up_colide is True:
 					up_colide = False
 				if Map.stages[stage_num][1][y][x_pos] == 1 or Map.stages[stage_num][1][y][x_pos] == 2:
+					print('up block colide')
 					Map.block_colide(Map, stage_num, x_pos, y)
-					break
+				break
+			elif Map.stages[stage_num][1][y][x_pos] <= -80:
+				print('up item colide')
+				Map.item_colide(Map, stage_num, x_pos, y)
+				up_len += 1
 			else:
 				up_len += 1
 		for y in range(y_pos + 1, y_pos + length):
 			print('stage num : %d | y : %d | x_pos : %d' %(stage_num, y, x_pos))
 			if y > 12:
 				break
-			elif Map.stages[stage_num][1][y][x_pos] != -1 and down_colide is True:
+			elif Map.stages[stage_num][1][y][x_pos] > -1:
 				down_colide = False
 				if Map.stages[stage_num][1][y][x_pos] == 1 or Map.stages[stage_num][1][y][x_pos] == 2:
 					Map.block_colide(Map, stage_num, x_pos, y)
 				break
+			elif Map.stages[stage_num][1][y][x_pos] <= -80:
+				Map.item_colide(Map, stage_num, x_pos, y)
+				down_len += 1
 			else:
 				down_len += 1
 		for x in range(x_pos - 1, x_pos - length, -1):
 			if x < 0:
 				break
-			elif Map.stages[stage_num][1][y_pos][x] != -1 and left_colide is True:
+			elif Map.stages[stage_num][1][y_pos][x] > -1 and left_colide is True:
 				left_colide = False
 				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
 					Map.block_colide(Map, stage_num, x, y_pos)
@@ -116,7 +124,7 @@ class Explode():
 		for x in range(x_pos + 1, x_pos + length):
 			if x > 14:
 				break
-			elif Map.stages[stage_num][1][y_pos][x] != -1 and right_colide is True:
+			elif Map.stages[stage_num][1][y_pos][x] > -1 and right_colide is True:
 				right_colide = False
 				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
 					Map.block_colide(Map, stage_num, x, y_pos)

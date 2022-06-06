@@ -16,6 +16,10 @@ class Soilder(object):
 		self.init_imgs()
 		self.rect = self.move_imgs[0].get_rect()
 		self.dir_time = 0
+		self.img = self.move_imgs[0]
+		self.die_idx = 0
+		self.die_flag = False
+		self.move_flag = True
 	
 	def init_imgs(self):
 		# move image init
@@ -30,16 +34,21 @@ class Soilder(object):
 		self.die_imgs.append(self.spritesheet.image_at((147, 128, 45, 27), colorkey=-1))
 
 	def animation(self, imgs, speed):
-		if imgs == None:
-			return self.move_imgs[0]
-		self.img_idx += speed
-		img = imgs[int(self.img_idx) % len(imgs)]
-		return img
+		if self.die_flag is True:
+			self.die_idx += speed
+			self.img = self.die_imgs[int(self.die_idx) % 4]
+			return self.img
+		else:
+			if imgs == None:
+				return self.move_imgs[0]
+			self.img_idx += speed
+			self.img = imgs[int(self.img_idx) % len(imgs)]
+			return self.img
 	
 	def check_up_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (y - 1) // 40 <= 12 and Map.stages[stage_num][1][(y - 1) // 40][x // 40] == -1:
+		if 0 <= (y - 1) // 40 <= 12 and Map.stages[stage_num][1][(y - 1) // 40][x // 40] <= -1:
 			return True
 		else:
 			return False
@@ -47,7 +56,7 @@ class Soilder(object):
 	def check_down_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (y + 1 + 40) // 40 <= 12 and Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] == -1:
+		if 0 <= (y + 1 + 40) // 40 <= 12 and Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] <= -1:
 			return True
 		else:
 			return False
@@ -55,7 +64,7 @@ class Soilder(object):
 	def check_left_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (x - 1) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x - 1) // 40] == -1:
+		if 0 <= (x - 1) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x - 1) // 40] <= -1:
 			return True
 		else:
 			return False
@@ -63,7 +72,7 @@ class Soilder(object):
 	def check_right_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (x + 1 + 40) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] == -1:
+		if 0 <= (x + 1 + 40) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] <= -1:
 			return True
 		else:
 			return False
@@ -85,36 +94,37 @@ class Soilder(object):
 		return dir[rand_dir]
 
 	def move(self, stage_num):
-		if self.y_pos >= Screen.margin // 2 and self.x_pos >= Screen.margin // 2:
-			x = (self.x_pos - Screen.margin // 2)
-			y = (self.y_pos - Screen.margin // 2)
-			self.dir_time += 1
-			if self.dir == 'left':
-				if (x - 1) // 40 == -1 or Map.stages[stage_num][1][y // 40][(x - 1) // 40] != -1:
+		if self.move_flag is True:
+			if self.y_pos >= Screen.margin // 2 and self.x_pos >= Screen.margin // 2:
+				x = (self.x_pos - Screen.margin // 2)
+				y = (self.y_pos - Screen.margin // 2)
+				self.dir_time += 1
+				if self.dir == 'left':
+					if (x - 1) // 40 <= -1 or Map.stages[stage_num][1][y // 40][(x - 1) // 40] > -1:
+						self.dir = self.search_valid_move(stage_num)
+					else:
+						self.x_pos -= self.speed
+				if self.dir == 'right':
+					if (x + 1) // 40 > 13 or Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] > -1:
+						print('right serach move')
+						self.dir = self.search_valid_move(stage_num)
+					else:
+						self.x_pos += self.speed
+				if self.dir == 'up':
+					if (y - 1) // 40 <= -1 or Map.stages[stage_num][1][(y - 1) // 40][x // 40] > -1:
+						self.dir = self.search_valid_move(stage_num)
+					else:
+						self.y_pos -= self.speed
+				if self.dir == 'down':
+					if (y + 1) // 40 > 11 or Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] > -1:
+						print('soilder dir down')
+						self.dir = self.search_valid_move(stage_num)
+					else:
+						self.y_pos += self.speed
+				if self.dir_time > 150 and (self.x_pos - Screen.margin // 2) % 40 == 0 and (self.y_pos - Screen.margin // 2) % 40:
+					self.dir_time = 0
 					self.dir = self.search_valid_move(stage_num)
-				else:
-					self.x_pos -= self.speed
-			if self.dir == 'right':
-				if (x + 1) // 40 > 13 or Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] != -1:
-					print('right serach move')
-					self.dir = self.search_valid_move(stage_num)
-				else:
-					self.x_pos += self.speed
-			if self.dir == 'up':
-				if (y - 1) // 40 == -1 or Map.stages[stage_num][1][(y - 1) // 40][x // 40] != -1:
-					self.dir = self.search_valid_move(stage_num)
-				else:
-					self.y_pos -= self.speed
-			if self.dir == 'down':
-				if (y + 1) // 40 > 11 or Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] != -1:
-					print('soilder dir down')
-					self.dir = self.search_valid_move(stage_num)
-				else:
-					self.y_pos += self.speed
-			if self.dir_time > 200:
-				self.dir_time = 0
-				self.dir = self.search_valid_move(stage_num)
-			if self.dir == None:
+				if self.dir == None:
 					self.dir = self.search_valid_move(stage_num)
 
 class Boss(object):
@@ -125,9 +135,27 @@ class Boss(object):
 		self.hit_img = self.spritesheet.image_at((1, 1, 1, 1), colorkey=-1)
 		self.die_imgs = []
 		self.img_idx = 0
-		self.x_pos = 200
-		self.y_pos = 200
+		self.x_pos = 240 + Screen.margin // 2
+		self.y_pos = 80 +  Screen.margin // 2
+		self.die_flag = False
+		self.die_idx = 0
+		self.health = 20
+		self.move_idx = 0
+		self.speed = 5
+		self.move_flag = True
+		self.dir = 'down'
+		self.dirs = ['left', 'right', 'up', 'down']
+		self.dir_time = 0
+		self.img = None
 		self.init_imgs()
+		self.rect = self.img.get_rect()
+		self.size = self.rect.size
+		self.blit_x = 0
+		self.blit_y = 0
+		self.state = 'move' # 'attack' 'hit'
+		self.states = ['move', 'attack', 'hit']
+		self.attack_idx = 0
+		self.past_state = 'move'
 
 	def init_imgs(self):
 		# move img init
@@ -152,11 +180,74 @@ class Boss(object):
 		self.die_imgs.append(self.spritesheet.image_at((561, 1137, 183, 61), colorkey=-1))
 		self.die_imgs.append(self.spritesheet.image_at((10, 1254, 159, 61), colorkey=-1))
 		self.die_imgs.append(self.spritesheet.image_at((200, 1251, 179, 61), colorkey=-1))
+		
+		self.img = self.move_imgs[0]
+	
+	def random_state(self):
+		rand_idx = randrange(0, 2)
+		print('rand idx', end='')
+		print(rand_idx)
+		self.state = self.states[rand_idx]
 
+	def move(self):
+		if self.state == 'move':
+			self.rect = self.img.get_rect()
+			self.rect.top = self.y_pos
+			self.rect.left = self.x_pos
+			if self.move_idx == 0:
+				self.dir = self.dirs[randrange(0, 4)]
+			if self.dir == 'left':
+				if self.x_pos > Screen.margin // 2:
+					self.x_pos -= self.speed
+			elif self.dir == 'right':
+				if self.x_pos + self.size[0] < Screen.margin // 2 + Screen.width:
+					self.x_pos += self.speed
+			elif self.dir == 'down':
+				if self.y_pos + self.size[1] < Screen.margin // 2 + Screen.height:
+					self.y_pos += self.speed
+			elif self.dir == 'up':
+				if self.y_pos > Screen.margin // 2:
+					self.y_pos -= self.speed
+			elif dir == None:
+				self.img = self.move_imgs[0]
+			self.move_idx += 0.1
+			self.img = self.move_imgs[int(self.move_idx) % 6]
+			if 3 <= int(self.move_idx) % 6 <= 4:
+				self.blit_y -= 3
+			elif int(self.move_idx) % 6 == 5:
+				self.blit_y += 6
+			if self.move_idx >= 6:
+				self.move_idx = 0
+				self.random_state()
+
+	def summon_soilder(self, soilder_num): # 얘가 move 보다 먼저 나와야함 그래야 state 안꼬임
+		if self.state == 'attack' and soilder_num < 3:
+			rand_x = randrange(0, 15)
+			rand_y = randrange(0, 13)
+			if self.attack_idx == 0:
+				self.img = self.attack_imgs[int(self.attack_idx) % 6]
+				self.attack_idx += 0.1
+				return (rand_x * 40, rand_y * 40)
+			elif self.attack_idx < 5:
+				self.img = self.attack_imgs[int(self.attack_idx) % 6]
+				self.attack_idx += 0.05
+				return None
+			else:
+				self.state = 'move'
+				self.attack_idx = 0
+				return None
+		else:
+			self.state = 'move'
+			return None
 
 	def animation(self, imgs, speed):
-		if imgs == None:
-			return self.move_imgs[0]
-		self.img_idx += speed
-		img = imgs[int(self.img_idx) % len(imgs)]
-		return img
+		if self.die_flag is True:
+			self.die_idx += speed
+			self.img = self.die_imgs[int(self.die_idx) % 6]
+			return self.img
+		else:
+			if imgs == None:
+				return self.move_imgs[0]
+			self.img_idx += speed
+			self.img = imgs[int(self.img_idx) % len(imgs)]
+			return self.img
