@@ -469,8 +469,10 @@ while running:
 				stage_num += 1
 				if stage_num == 1:
 					soilders = [Soilder(asset_path + 'monster/soilder_sprite.png', x, y) for x, y in stage2_soilder_pos]
+					bombs = []
 				elif stage_num == 2:
 					soilders = []
+					bombs = []
 				character.default_character_state(stage_num)
 		if character.die_idx >= 6:
 			running = False
