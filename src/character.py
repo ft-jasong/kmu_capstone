@@ -208,15 +208,17 @@ class CharacterAnimation(object):
 		elif dir == 'up' or dir == 'down':
 			if cor_dir == 'right': # 위 아래 무빙 오른쪽 보정
 				# while self.x_pos + 45 <= x:
+				print('오른쪽으로 보정하기')
 				if self.x_pos + 45 <= x:
 					self.x_pos += self.speed
 			elif cor_dir == 'left': # 위 아래 무빙 왼쪽 보정
+				print('왼쪽으로 보정하기')
 				# while self.x_pos > x:
 				# print('self x pos : ', end='')
 				# print(self.x_pos)
 				# print('x : ', end='')
 				# print(x)
-				if self.x_pos > x:
+				if self.x_pos - 5 >= x:
 					# print('up left if')
 					self.x_pos -= self.speed
 
@@ -274,7 +276,7 @@ class CharacterAnimation(object):
 					return False
 				elif blocks[right_y][right_x] > -1:
 					return False
-				elif (self.y_pos + 22) // 40 <= 12 and self.y_pos >= 22:
+				elif (self.y_pos + 22) // 40 <= 12 and self.y_pos >= -22:
 					if blocks[(self.y_pos + 22)//40][(self.x_pos + 22)//40] > -1: # 윗보정 - 우측 아래 블럭 확인
 						self.move_correction(down_x * 40, (down_y - 1) * 40 + 13, 'right', 'up') # 윗보정
 						return True
@@ -297,9 +299,11 @@ class CharacterAnimation(object):
 					return False
 				elif self.y_pos >= 22 and self.x_pos - 21 >= 0 and (self.x_pos + 21) // 40 <= 14:
 					if blocks[(self.y_pos - 22)//40][(self.x_pos - 21)//40] > -1: # 오른보정 - 왼쪽 윗 블럭 확인
+						print('위에서 오른쪽 들어가는 입구')
 						self.move_correction((center_x + 1) * 40 + 20, self.y_pos, 'up', 'right') # 윗보정
 						return True
 					elif blocks[(self.y_pos - 22)//40][(self.x_pos + 21)//40] > -1: # 왼보정 - 오른 윗 블럭 확인
+						print('위에서 왼쪽 들어가는 입구')
 						self.move_correction(center_x * 40 + 20, self.y_pos, 'up', 'left')
 						return True
 					return True
@@ -317,10 +321,12 @@ class CharacterAnimation(object):
 					return False
 				elif self.y_pos >= 22 and self.x_pos - 21 >= 0 and (self.x_pos + 21) // 40 <= 14:
 					if blocks[(self.y_pos + 22)//40][(self.x_pos - 21)//40] > -1: # 오른보정 - 왼쪽 아래 블럭 확인
-						self.move_correction((center_x + 1) * 40 + 20, self.y_pos, 'up', 'right') # 윗보정
+						print('아래에서 오른쪽 들어가는 입구')
+						self.move_correction((center_x + 1) * 40 + 20, self.y_pos, 'down', 'right') # 윗보정
 						return True
 					elif blocks[(self.y_pos + 22)//40][(self.x_pos + 21)//40] > -1: # 왼보정 - 오른쪽 아래 블럭 확인
-						self.move_correction(center_x * 40 + 20, self.y_pos, 'up', 'left')
+						print('아래에서 왼쪽 들어가는 입구')
+						self.move_correction(center_x * 40 + 20, self.y_pos, 'down', 'left')
 						return True
 		return True
 

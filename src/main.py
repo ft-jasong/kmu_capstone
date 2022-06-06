@@ -82,10 +82,10 @@ while running:
 		if event.type == pygame.KEYDOWN:
 			if stage_num < 0:
 				gamestart_sound.play()
-				# stage_num += 1 
-				stage_num = 2 #이거 주석 풀면 보스
-				soilders = [] # 보스 바로가기
-				# soilders = [Soilder(asset_path + 'monster/soilder_sprite.png', x, y) for x, y in stage1_soilder_pos]
+				# stage_num = 2 #이거 주석 풀면 보스
+				# soilders = [] # 보스 바로가기
+				stage_num += 1 
+				soilders = [Soilder(asset_path + 'monster/soilder_sprite.png', x, y) for x, y in stage1_soilder_pos]
 				character.default_character_state(stage_num)
 			if character.die_state is False and character.bubble_state is False:
 				if event.key == pygame.K_LEFT:
