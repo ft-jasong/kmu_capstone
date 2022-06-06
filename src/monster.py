@@ -139,7 +139,7 @@ class Boss(object):
 		self.y_pos = 80 +  Screen.margin // 2
 		self.die_flag = False
 		self.die_idx = 0
-		self.health = 1
+		self.health = 10
 		self.move_idx = 0
 		self.speed = 4
 		self.move_flag = True
