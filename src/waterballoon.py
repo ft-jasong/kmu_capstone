@@ -119,6 +119,9 @@ class Explode():
 				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
 					Map.block_colide(Map, stage_num, x, y_pos)
 				break
+			elif Map.stages[stage_num][1][y_pos][x] <= -80:
+				Map.item_colide(Map, stage_num, x, y_pos)
+				left_len += 1	
 			else:
 				left_len += 1
 		for x in range(x_pos + 1, x_pos + length):
@@ -129,6 +132,9 @@ class Explode():
 				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
 					Map.block_colide(Map, stage_num, x, y_pos)
 				break
+			elif Map.stages[stage_num][1][y_pos][x] <= -80:
+				Map.item_colide(Map, stage_num, x, y_pos)
+				right_len += 1	
 			else:
 				right_len += 1
 		return (up_len, down_len, left_len, right_len)
