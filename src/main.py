@@ -464,7 +464,7 @@ while running:
 					block_list = stage.pirate.blocks[stage.stages[stage_num][1][y + 1][x]]
 					screen.window.blit(block_list[0],
 					(x * 40 + screen.margin // 2, y * 40 + 40 - block_list[2] + screen.margin // 2))
-		if stage_num <= 2:
+		if stage_num <= 1:
 			if len(soilders) <= 0:
 				stage_num += 1
 				if stage_num == 1:

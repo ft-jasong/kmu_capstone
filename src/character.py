@@ -77,9 +77,9 @@ class CharacterAnimation(object):
 		self.right_stop = None
 		self.up_stop = None
 		self.down_stop = None
-		self.bomb_len = 11
+		self.bomb_len = 2
 		self.max_bomb_len = 7
-		self.max_bomb = 99
+		self.max_bomb = 9
 		self.max_bomb_count = 9
 		self.center_x = Screen.margin
 		self.center_y = Screen.margin
