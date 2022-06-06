@@ -20,7 +20,6 @@ class Explode():
 		self.explode_right_info = []
 		self.explode_time = 0
 		self.init_explode_imgs()
-
 		# for animation
 		self.img_idx = 0
 
@@ -35,7 +34,6 @@ class Explode():
 		exp_center_img2 = pygame.image.load(img_path + 'explosion02.png').convert()
 		self.explode_center.append(image_colorkey(exp_center_img2, (0, 0, 40, 40)))
 		self.explode_center_info.append((40, 40))
-		
 		# up image init
 		exp_up_img0 = pygame.image.load(img_path + 'explosion10.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img0, (0, 0, 40, 40), -1))
@@ -52,16 +50,13 @@ class Explode():
 		exp_up_img4 = pygame.image.load(img_path + 'explosion15.png').convert()
 		self.explode_up.append(image_colorkey(exp_up_img4, (0, 0, 40, 40), -1))
 		self.explode_up_info.append((40, 40))
-		
 		# down image init
 		self.explode_down = [pygame.transform.rotate(img, 180) for img in self.explode_up]
 		self.explode_down_info = [size for size in self.explode_up_info]
-
 		# # left image init
 		# self.explode_down
 		self.explode_left = [pygame.transform.rotate(img, 90) for img in self.explode_up]
 		self.explode_left_info = [size for size in self.explode_up_info]
-
 		# # right image init
 		self.explode_right = [pygame.transform.rotate(img, 270) for img in self.explode_up]
 		self.explode_right_info = [size for size in self.explode_up_info]
@@ -84,67 +79,54 @@ class Explode():
 		down_len = 0
 		left_len = 0
 		right_len = 0
-		for y in range(y_pos - 1, y_pos - length):
+		print('x pos : %d | y pos : %d | len : %d' %(x_pos, y_pos, length))
+		for y in range(y_pos - 1, y_pos - length, -1):
+			print('this is for up')
 			if y < 0:
 				break
-			elif Map.stages[stage_num][y][x_pos] != -1:
+			elif Map.stages[stage_num][1][y][x_pos] != -1:
 				if up_colide is True:
 					up_colide = False
-					Map.block_colide(stage_num, x_pos, y)
+				if Map.stages[stage_num][1][y][x_pos] == 1 or Map.stages[stage_num][1][y][x_pos] == 2:
+					Map.block_colide(Map, stage_num, x_pos, y)
 					break
 			else:
-				if y == y_pos - length + 1:
-					# Map.stages[stage_num][y][x_pos] = 31 # UP 끝
-					up_len += 1
-				else:
-					# Map.stages[stage_num][y][x_pos] = 32 # UP 줄기
-					up_len += 1
+				up_len += 1
 		for y in range(y_pos + 1, y_pos + length):
+			print('stage num : %d | y : %d | x_pos : %d' %(stage_num, y, x_pos))
 			if y > 12:
 				break
-			elif Map.stages[stage_num][y][x_pos] != -1 and down_colide is True:
+			elif Map.stages[stage_num][1][y][x_pos] != -1 and down_colide is True:
 				down_colide = False
-				Map.block_colide(Map, stage_num, x_pos, y)
+				if Map.stages[stage_num][1][y][x_pos] == 1 or Map.stages[stage_num][1][y][x_pos] == 2:
+					Map.block_colide(Map, stage_num, x_pos, y)
 				break
 			else:
-				if y == y_pos + length - 1:
-					# Map.stages[stage_num][y][x_pos] = 33 # down 끝
-					down_len += 1
-				else:
-					# Map.stages[stage_num][y][x_pos] = 34 # Down 줄기
-					down_len += 1
-		for x in range(x_pos - 1, x_pos - length):
+				down_len += 1
+		for x in range(x_pos - 1, x_pos - length, -1):
 			if x < 0:
 				break
-			elif Map.stages[stage_num][y_pos][x] != -1 and left_colide is True:
+			elif Map.stages[stage_num][1][y_pos][x] != -1 and left_colide is True:
 				left_colide = False
-				Map.block_colide(stage_num, x, y_pos)
+				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
+					Map.block_colide(Map, stage_num, x, y_pos)
 				break
 			else:
-				if x == x_pos - length + 1:
-					# Map.stages[stage_num][y_pos][x] = 35 # left 끝
-					left_len += 1
-				else:
-					# Map.stages[stage_num][y_pos][x] = 36 # left 줄기
-					left_len += 1
+				left_len += 1
 		for x in range(x_pos + 1, x_pos + length):
 			if x > 14:
 				break
-			elif Map.stages[stage_num][y_pos][x] != -1 and right_colide is True:
+			elif Map.stages[stage_num][1][y_pos][x] != -1 and right_colide is True:
 				right_colide = False
-				Map.block_colide(Map, stage_num, x, y_pos)
+				if Map.stages[stage_num][1][y_pos][x] == 1 or Map.stages[stage_num][1][y_pos][x] == 2:
+					Map.block_colide(Map, stage_num, x, y_pos)
 				break
 			else:
-				if x == x_pos + length - 1:
-					# Map.stages[stage_num][y_pos][x] = 37 # right 끝
-					right_len += 1
-				else:
-					# Map.stages[stage_num][y_pos][x] = 38 # right 줄기
-					right_len += 1
+				right_len += 1
 		return (up_len, down_len, left_len, right_len)
 class Bomb():
-	def __init__(self):
-		self.length = 2
+	def __init__(self, length):
+		self.length = length
 		self.bomb_imgs = []
 		self.bomb_shadow = None
 		self.bomb_imgs_info = []

@@ -121,30 +121,48 @@ class Pirate(object):
 		block_steel.append(block_steel_sprite.image_at((0, 0, 40, 7), colorkey=-1))
 		block_steel.append(block_steel_sprite.image_at((0, 7, 40, 40), colorkey=None))
 		block_steel.append(int(7))
+		block_steel.append(block_steel[0].get_rect())
+		block_steel.append(block_steel[1].get_rect())
 		block_normal.append(block_normal_sprite.image_at((1, 1, 40, 7), colorkey=-1))
 		block_normal.append(block_normal_sprite.image_at((1, 9, 40, 40), colorkey=None))
 		block_normal.append(int(7))
+		block_normal.append(block_normal[0].get_rect())
+		block_normal.append(block_normal[1].get_rect())
 		block_box.append(block_box_sprite.image_at((0, 0, 40, 7), colorkey=-1))
 		block_box.append(block_box_sprite.image_at((0, 8, 40, 40), colorkey=None))
 		block_box.append(int(7))
+		block_box.append(block_box[0].get_rect())
+		block_box.append(block_box[1].get_rect())
 		block_pole.append(block_stage2_sprite.image_at((280, 94, 40, 26), colorkey=-1))
 		block_pole.append(block_stage2_sprite.image_at((280, 120, 40, 40), colorkey=None))
 		block_pole.append(26)
+		block_pole.append(block_pole[0].get_rect())
+		block_pole.append(block_pole[1].get_rect())
 		block_blue.append(block_stage2_sprite.image_at((440, 100, 40, 18), colorkey=-1))
 		block_blue.append(block_stage2_sprite.image_at((440, 118, 40, 40), colorkey=None))
 		block_blue.append(18)
+		block_blue.append(block_blue[0].get_rect())
+		block_blue.append(block_blue[1].get_rect())
 		block_green.append(block_stage2_sprite.image_at((480, 100, 40, 18), colorkey=-1))
 		block_green.append(block_stage2_sprite.image_at((480, 118, 40, 40), colorkey=None))
 		block_green.append(18)
+		block_green.append(block_green[0].get_rect())
+		block_green.append(block_green[1].get_rect())
 		block_orange.append(block_stage2_sprite.image_at((520, 100, 40, 18), colorkey=-1))
 		block_orange.append(block_stage2_sprite.image_at((520, 118, 40, 40), colorkey=None))
 		block_orange.append(18)
+		block_orange.append(block_orange[0].get_rect())
+		block_orange.append(block_orange[1].get_rect())
 		block_red.append(block_stage2_sprite.image_at((560, 100, 40, 18), colorkey=-1))
 		block_red.append(block_stage2_sprite.image_at((560, 118, 40, 40), colorkey=None))
 		block_red.append(18)
+		block_red.append(block_red[0].get_rect())
+		block_red.append(block_red[1].get_rect())
 		block_turtle.append(block_stage2_sprite.image_at((521, 22, 40, 16), colorkey=-1))
 		block_turtle.append(block_stage2_sprite.image_at((521, 38, 40, 40), colorkey=None))
 		block_turtle.append(16)
+		block_turtle.append(block_turtle[0].get_rect())
+		block_turtle.append(block_turtle[1].get_rect())
 		self.blocks.append(block_steel) # NUM 0
 		self.blocks.append(block_normal) # NUM 1
 		self.blocks.append(block_box) # NUM 2
@@ -166,7 +184,8 @@ class Map(object):
 		self.pirate = Pirate()
 
 	def block_colide(self, stage_num, x_pos, y_pos):
-		self.stages[stage_num][1][y_pos][x_pos] = random.randrange(80, 84) 
+		# self.stages[stage_num][1][y_pos][x_pos] = random.randrange(80, 84) 
+		self.stages[stage_num][1][y_pos][x_pos] = -1
 # Block 클래스 하나 사용해도 괜찮을것 같음. 이 밑은 테스트용 클래스. Map 내부에서 list로 사용하는 것과 비교해서 사용 예정.
 
 # class Block(object):

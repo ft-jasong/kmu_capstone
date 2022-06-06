@@ -6,6 +6,7 @@ import monster
 from waterballoon import Bomb, Explode
 from screen import Screen
 from item import *
+from monster import *
 
 pygame.init()
 
@@ -25,11 +26,12 @@ dir = None
 
 stage = Map()
 soilder = monster.Soilder(asset_path + 'monster/soilder_sprite.png')
+mob = []
 boss = monster.Boss(asset_path + 'monster/boss_sprite.png')
-bomb = Bomb()
 bomb_imgs = []
 bombs = []
-stage_num = 0
+bomb = Bomb(character.bomb_len)
+stage_num = 1
 items = Item()
 explosions = []
 # test finished
@@ -56,7 +58,7 @@ while running:
 			if event.key == pygame.K_SPACE:
 				bomb_pos = character.balloon_pos()
 				if stage.stages[stage_num][1][bomb_pos[1] // 40][bomb_pos[0] // 40] == -1:
-					bombs.append([Bomb(), bomb_pos])
+					bombs.append([Bomb(character.bomb_len), bomb_pos])
 					stage.stages[stage_num][1][bomb_pos[1] // 40][bomb_pos[0] // 40] = 10
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_SPACE:
@@ -84,8 +86,8 @@ while running:
 
 	# boss_img = boss.animation(boss.die_imgs, 0.1)
 	# screen.window.blit(boss_img, (100, 100 + boss.y_pos))
-	# soilder_img = soilder.animation(soilder.die_imgs, 0.1)
-	# screen.window.blit(soilder_img, (50, 50))
+	soilder_img = soilder.animation(soilder.move_imgs, 0.1)
+	screen.window.blit(soilder_img, (soilder.x_pos, soilder.y_pos))
 	# bomb 깔기
 	for b in bombs:
 		if b[0].img_idx > 12:
@@ -98,11 +100,10 @@ while running:
 			explode = Explode()
 			water_info.append(explode.explode(length, x_pos, y_pos, stage_num))
 			water_info.append((x_pos, y_pos))
+			water_info.append(explode)
 			explosions.append(water_info)
-			explosions.append(explode)
 		else:
 			screen.window.blit(b[0].animation(bomb.bomb_imgs, 0.05), b[1])
-	 
 
 	# 블럭 깔기
 	for y in range(13):
@@ -113,20 +114,55 @@ while running:
 				(x * 40 + screen.margin // 2, y * 40 + screen.margin // 2))
 	
 	# 폭발 처리
-	for i in range(len(explosions)):
-		screen.window.blit(explosions[1].explode_center[0], (explosions[0][1][0] * 40, explosions[0][1][1] * 40))
-		if explosions[1].explode_time > 100:
+	for e in explosions:
+		# print(len(explosions))
+		# print((e[1][0] * 40, e[1][1] * 40))
+		if e[2].explode_time > 100:
 			explosions.pop(0)
 		else:
-			for y in range(explosions[0][1][1] - 1, explosions[0][1][1] - explosions[0][0][0]):
-				screen.window.blit(explode.explode_up[4], (explosions[0][1][0] * 40, y * 40))
-			for y in range(explosions[0][1][1] + 1, explosions[0][1][1] + explosions[0][0][1]):
-				screen.window.blit(explode.explode_down[4], (explosions[0][1][0] * 40, y * 40))
-			for x in range(explosions[0][1][0] - 1, explosions[0][1][0] - explosions[0][0][2]):
-				screen.window.blit(explode.explode_left[4], (x * 40, explosions[0][1][1]))
-			for x in range(explosions[0][1][0] + 1, explosions[0][1][0] + explosions[0][0][3]):
-				screen.window.blit(explode.explode_right[4], (x * 40, explosions[0][1][1]))
-			explosions[1].explode_time += 1
+			idx = (e[2].explode_time) // 10 % 3
+			screen.window.blit(e[2].explode_center[idx], (e[1][0] * 40 + 20, e[1][1] * 40 + 20))
+			for y in range(e[1][1] - 1, e[1][1] - e[0][0] - 1, -1):
+				if y ==  e[1][1] - e[0][0]:
+					idx = (e[2].explode_time) // 10 % 2
+					if e[2].explode_time <= 70:
+						screen.window.blit(explode.explode_up[idx], (e[1][0] * 40 + 20, y * 40 + 20))
+					else:
+						idx = ((e[2].explode_time) - 61) // 10
+						screen.window.blit(explode.explode_up[idx], (e[1][0] * 40 + 20, y * 40 + 20))
+				else:
+					screen.window.blit(explode.explode_up[4], (e[1][0] * 40 + 20, y * 40 + 20))
+			for y in range(e[1][1] + 1, e[1][1] + e[0][1] + 1):
+				if y ==  e[1][1] + e[0][1]:
+					idx = (e[2].explode_time) // 10 % 2
+					if e[2].explode_time <= 70:
+						screen.window.blit(explode.explode_down[idx], (e[1][0] * 40 + 20, y * 40 + 20))
+					else:
+						idx = ((e[2].explode_time) - 61) // 10
+						screen.window.blit(explode.explode_down[idx], (e[1][0] * 40 + 20, y * 40 + 20))
+				else:
+					screen.window.blit(explode.explode_down[4], (e[1][0] * 40 + 20, y * 40 + 20))
+			for x in range(e[1][0] - 1, e[1][0] - e[0][2] - 1, -1):
+				if x == e[1][0] - e[0][2]:
+					idx = (e[2].explode_time) // 10 % 2
+					if e[2].explode_time <= 70:
+						screen.window.blit(explode.explode_left[idx], (x * 40 + 20, e[1][1] * 40 + 20))
+					else:
+						idx = ((e[2].explode_time) - 61) // 10
+						screen.window.blit(explode.explode_left[idx], (x * 40 + 20, e[1][1] * 40 + 20))
+				else:
+					screen.window.blit(explode.explode_left[4], (x * 40 + 20, e[1][1] * 40 + 20))
+			for x in range(e[1][0] + 1, e[1][0] + e[0][3] + 1):
+				if x == e[1][0] + e[0][3]:
+					idx = (e[2].explode_time) // 10 % 2
+					if e[2].explode_time <= 70:
+						screen.window.blit(explode.explode_right[idx], (x * 40 + 20, e[1][1] * 40 + 20))
+					else:
+						idx = ((e[2].explode_time) - 61) // 10
+						screen.window.blit(explode.explode_right[idx], (x * 40 + 20, e[1][1] * 40 + 20))
+				else:
+					screen.window.blit(explode.explode_right[4], (x * 40 + 20, e[1][1] * 40 + 20))
+			e[2].explode_time += 1
 
 	# 캐릭터 애니메이션
 	img = character.animation(0.2, dir)
@@ -139,11 +175,6 @@ while running:
 				block_list = stage.pirate.blocks[stage.stages[stage_num][1][y + 1][x]]
 				screen.window.blit(block_list[0],
 				(x * 40 + screen.margin // 2, y * 40 + 40 - block_list[2] + screen.margin // 2))
-
-	# explode 구현
-	# explode_up = explode.animation(explode.explode_up, 0.1)
-	# screen.window.blit(explode_up, (100, 200))
-	# explode_down = explode.animation(explode.explode_down, 0.1)
-	# screen.window.blit(explode_down, (50, 200))
+	soilder.move(stage_num)
 	pygame.display.update()
 pygame.quit()
