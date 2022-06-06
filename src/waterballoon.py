@@ -63,7 +63,7 @@ class Explode():
 	
 	def animation(self, imgs, speed):
 		if imgs == None:
-			print('waterballoon image animation imgs is NULL')
+			# print('waterballoon image animation imgs is NULL')
 			return None
 		self.img_idx += speed
 		img = imgs[int(self.img_idx) % len(imgs)]
@@ -79,26 +79,26 @@ class Explode():
 		down_len = 0
 		left_len = 0
 		right_len = 0
-		print('x pos : %d | y pos : %d | len : %d' %(x_pos, y_pos, length))
+		# print('x pos : %d | y pos : %d | len : %d' %(x_pos, y_pos, length))
 		for y in range(y_pos - 1, y_pos - length, -1):
-			print('this is for up')
+			# print('this is for up')
 			if y < 0:
 				break
 			elif Map.stages[stage_num][1][y][x_pos] > -1:
 				if up_colide is True:
 					up_colide = False
 				if Map.stages[stage_num][1][y][x_pos] == 1 or Map.stages[stage_num][1][y][x_pos] == 2:
-					print('up block colide')
+					# print('up block colide')
 					Map.block_colide(Map, stage_num, x_pos, y)
 				break
 			elif Map.stages[stage_num][1][y][x_pos] <= -80:
-				print('up item colide')
+				# print('up item colide')
 				Map.item_colide(Map, stage_num, x_pos, y)
 				up_len += 1
 			else:
 				up_len += 1
 		for y in range(y_pos + 1, y_pos + length):
-			print('stage num : %d | y : %d | x_pos : %d' %(stage_num, y, x_pos))
+			# print('stage num : %d | y : %d | x_pos : %d' %(stage_num, y, x_pos))
 			if y > 12:
 				break
 			elif Map.stages[stage_num][1][y][x_pos] > -1:

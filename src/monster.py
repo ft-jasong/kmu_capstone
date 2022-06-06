@@ -48,7 +48,7 @@ class Soilder(object):
 	def check_up_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (y - 1) // 40 <= 12 and Map.stages[stage_num][1][(y - 1) // 40][x // 40] <= -1:
+		if 0 <= (y - 3) // 40 <= 12 and Map.stages[stage_num][1][(y - 3) // 40][x // 40] <= -1:
 			return True
 		else:
 			return False
@@ -56,7 +56,7 @@ class Soilder(object):
 	def check_down_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (y + 1 + 40) // 40 <= 12 and Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] <= -1:
+		if 0 <= (y + 3 + 40) // 40 <= 12 and Map.stages[stage_num][1][(y + 3 + 37) // 40][x // 40] <= -1:
 			return True
 		else:
 			return False
@@ -64,7 +64,7 @@ class Soilder(object):
 	def check_left_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (x - 1) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x - 1) // 40] <= -1:
+		if 0 <= (x - 3) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x - 3) // 40] <= -1:
 			return True
 		else:
 			return False
@@ -72,7 +72,7 @@ class Soilder(object):
 	def check_right_move(self, stage_num):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
-		if 0 <= (x + 1 + 40) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] <= -1:
+		if 0 <= (x + 3 + 40) // 40 <= 14 and Map.stages[stage_num][1][y // 40][(x + 3 + 40) // 40] <= -1:
 			return True
 		else:
 			return False
@@ -81,7 +81,7 @@ class Soilder(object):
 		x = (self.x_pos - Screen.margin // 2)
 		y = (self.y_pos - Screen.margin // 2)
 		rand_dir = randrange(0,4)
-		print(rand_dir)
+		# print(rand_dir)
 		dir = ['right', 'up', 'left', 'down']
 		if rand_dir == 0 and self.check_right_move(stage_num) == True:
 			return 'right'
@@ -106,7 +106,7 @@ class Soilder(object):
 						self.x_pos -= self.speed
 				if self.dir == 'right':
 					if (x + 1) // 40 > 13 or Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] > -1:
-						print('right serach move')
+						# print('right serach move')
 						self.dir = self.search_valid_move(stage_num)
 					else:
 						self.x_pos += self.speed
@@ -117,13 +117,13 @@ class Soilder(object):
 						self.y_pos -= self.speed
 				if self.dir == 'down':
 					if (y + 1) // 40 > 11 or Map.stages[stage_num][1][(y + 1 + 37) // 40][x // 40] > -1:
-						print('soilder dir down')
+						# print('soilder dir down')
 						self.dir = self.search_valid_move(stage_num)
 					else:
 						self.y_pos += self.speed
-				if self.dir_time > 150 and (self.x_pos - Screen.margin // 2) % 40 == 0 and (self.y_pos - Screen.margin // 2) % 40:
-					self.dir_time = 0
-					self.dir = self.search_valid_move(stage_num)
+				# if self.dir_time > 150 and (self.x_pos - Screen.margin // 2) % 40 == 0 and (self.y_pos - Screen.margin // 2) % 40:
+				# 	self.dir_time = 0
+				# 	self.dir = self.search_valid_move(stage_num)
 				if self.dir == None:
 					self.dir = self.search_valid_move(stage_num)
 
@@ -139,9 +139,9 @@ class Boss(object):
 		self.y_pos = 80 +  Screen.margin // 2
 		self.die_flag = False
 		self.die_idx = 0
-		self.health = 20
+		self.health = 1
 		self.move_idx = 0
-		self.speed = 5
+		self.speed = 4
 		self.move_flag = True
 		self.dir = 'down'
 		self.dirs = ['left', 'right', 'up', 'down']
@@ -156,6 +156,7 @@ class Boss(object):
 		self.states = ['move', 'attack', 'hit']
 		self.attack_idx = 0
 		self.past_state = 'move'
+		self.hit_time = 0
 
 	def init_imgs(self):
 		# move img init
@@ -185,12 +186,14 @@ class Boss(object):
 	
 	def random_state(self):
 		rand_idx = randrange(0, 2)
-		print('rand idx', end='')
-		print(rand_idx)
+		# print('rand idx', end='')
+		# print(rand_idx)
 		self.state = self.states[rand_idx]
 
 	def move(self):
-		if self.state == 'move':
+		if self.health <= 0:
+			self.die_flag = True
+		elif self.state == 'move':
 			self.rect = self.img.get_rect()
 			self.rect.top = self.y_pos
 			self.rect.left = self.x_pos
@@ -218,13 +221,16 @@ class Boss(object):
 				self.blit_y += 6
 			if self.move_idx >= 6:
 				self.move_idx = 0
+				self.blit_y = 0
 				self.random_state()
+		elif self.state == 'hit':
+			self.hit()
 
 	def summon_soilder(self, soilder_num): # 얘가 move 보다 먼저 나와야함 그래야 state 안꼬임
-		if self.state == 'attack' and soilder_num < 3:
+		if self.health > 0 and self.state == 'attack':
 			rand_x = randrange(0, 15)
 			rand_y = randrange(0, 13)
-			if self.attack_idx == 0:
+			if self.attack_idx == 0 and soilder_num < 3:
 				self.img = self.attack_imgs[int(self.attack_idx) % 6]
 				self.attack_idx += 0.1
 				return (rand_x * 40, rand_y * 40)
@@ -236,10 +242,31 @@ class Boss(object):
 				self.state = 'move'
 				self.attack_idx = 0
 				return None
-		else:
-			self.state = 'move'
+		elif self.state == 'hit':
+			self.attack_idx = 0
+			self.hit()
 			return None
+		else:
+			# self.state = 'move'
+			# self.attack_idx = 0
+			return None
+	def die_animation(self):
+		self.die_idx += 0.05
+		self.img = self.die_imgs[int(self.die_idx) % 4]
 
+	def hit(self):
+		if self.hit_time == 0:
+			self.health -= 1
+			if self.health <= 0:
+				return None
+			self.past_state = self.state
+			self.state = 'hit'
+		self.img = self.hit_img
+		self.hit_time += 0.1
+		if self.hit_time > 10:
+			self.state = self.past_state
+			self.hit_time = 0
+			
 	def animation(self, imgs, speed):
 		if self.die_flag is True:
 			self.die_idx += speed

@@ -77,9 +77,9 @@ class CharacterAnimation(object):
 		self.right_stop = None
 		self.up_stop = None
 		self.down_stop = None
-		self.bomb_len = 2
+		self.bomb_len = 11
 		self.max_bomb_len = 7
-		self.max_bomb = 1
+		self.max_bomb = 99
 		self.max_bomb_count = 9
 		self.center_x = Screen.margin
 		self.center_y = Screen.margin
@@ -88,10 +88,13 @@ class CharacterAnimation(object):
 		self.bubble_state = False
 		self.die_state = False
 		self.die_idx = 0
+		self.die_sound = pygame.mixer.Sound(self.cur_dir + '/../asset/sound/balloon_explosion.mp3')
 		self.init_all_imgs()
 
 	def animation(self, speed, dir):
 		if self.die_state is True:
+			if self.die_idx == 0:
+				self.die_sound.play()
 			self.die_idx += speed / 2
 			# if self.die_idx >= 7:
 			# 	return None
@@ -118,7 +121,7 @@ class CharacterAnimation(object):
 			else:
 				return self.down_stop
 
-	def item_get_check(self, stage_num):
+	def item_get_check(self, stage_num, item_sound):
 		cur_x = round(self.center_x - 0.44) // 40
 		cur_y = round(self.center_y - 0.38) // 40
 		item_idx = Map.stages[stage_num][1][cur_y][cur_x] + 85
@@ -137,6 +140,7 @@ class CharacterAnimation(object):
 					# bgm
 				elif item_idx == 3:
 					self.bomb_len = self.max_bomb_len
+				item_sound.play()
 			Map.stages[stage_num][1][cur_y][cur_x] = -1
 
 	def move_position(self, dir, stage_num):
@@ -175,8 +179,15 @@ class CharacterAnimation(object):
 
 	def default_character_state(self, stage_num):
 		self.img_idx = 0
-		self.x_pos = 0
-		self.y_pos = 0
+		if stage_num == 0:
+			self.x_pos = 11 * 40 + Screen.margin // 2
+			self.y_pos = 4 * 40 + Screen.margin // 2
+		elif stage_num == 1:
+			self.x_pos = 9 * 40 + Screen.margin // 2
+			self.y_pos = 11 * 40 + Screen.margin // 2
+		elif stage_num == 2:
+			self.x_pos = 6 * 40 + Screen.margin // 2
+			self.y_pos = 11 * 40 + Screen.margin // 2
 		self.speed = 3
 		self.max_bomb = 1
 		self.bomb_len = 2
@@ -196,19 +207,17 @@ class CharacterAnimation(object):
 					self.y_pos -= self.speed
 		elif dir == 'up' or dir == 'down':
 			if cor_dir == 'right': # 위 아래 무빙 오른쪽 보정
-				print(self.x_pos)
-				print(x)
 				# while self.x_pos + 45 <= x:
 				if self.x_pos + 45 <= x:
 					self.x_pos += self.speed
 			elif cor_dir == 'left': # 위 아래 무빙 왼쪽 보정
 				# while self.x_pos > x:
-				print('self x pos : ', end='')
-				print(self.x_pos)
-				print('x : ', end='')
-				print(x)
+				# print('self x pos : ', end='')
+				# print(self.x_pos)
+				# print('x : ', end='')
+				# print(x)
 				if self.x_pos > x:
-					print('up left if')
+					# print('up left if')
 					self.x_pos -= self.speed
 
 	def isMoveable(self, dir, blocks):
@@ -232,9 +241,9 @@ class CharacterAnimation(object):
 		if dir == 'left' or dir == 'right':
 			if dir == 'left':
 				# if cur_rect[0] >= half_margin - 1 and left_x < 15:
-				# 	print("left x : %d | left y : %d | block : %d" %(left_x, left_y, blocks[left_y][left_x]))
+				# 	# print("left x : %d | left y : %d | block : %d" %(left_x, left_y, blocks[left_y][left_x]))
 				if center_x > 0 and blocks[center_y][center_x] == 10:
-					print('center x : %d | center y : %d' %(center_x, center_y))
+					# print('center x : %d | center y : %d' %(center_x, center_y))
 					if left_x == center_x - 1 and blocks[left_y][left_x] > -1:
 						return False
 					elif left_x == 0 and center_x == 0:
@@ -255,7 +264,7 @@ class CharacterAnimation(object):
 					return True
 			if dir == 'right': # 오른 키 보정
 				# if cur_rect[2] + half_margin <= half_margin + Screen.width and right_x < 15:
-				# 	print("right x : %d | right y : %d | block : %d" %(right_x, right_y, blocks[right_y][right_x]))
+				# 	# print("right x : %d | right y : %d | block : %d" %(right_x, right_y, blocks[right_y][right_x]))
 				if center_x < 14 and blocks[center_y][center_x] == 10:
 					if right_x == center_x + 1 and blocks[right_y][right_x] > -1:
 						return False
@@ -276,7 +285,7 @@ class CharacterAnimation(object):
 		elif dir == 'up' or dir == 'down':
 			if dir == 'up':
 				# if cur_rect[1] + half_margin >= half_margin - 1 and up_y < 13:
-				# 	print("up x : %d | up y : %d | block : %d" %(up_x, up_y, blocks[up_y][up_x]))
+				# 	# print("up x : %d | up y : %d | block : %d" %(up_x, up_y, blocks[up_y][up_x]))
 				if center_y > 0 and blocks[center_y][center_x] == 10:
 					if up_y == center_y - 1 and blocks[up_y][up_x] > -1:
 						return False
@@ -296,7 +305,7 @@ class CharacterAnimation(object):
 					return True
 			if dir == 'down':
 				# if cur_rect[3] + half_margin <= half_margin + Screen.width and down_y < 13:
-				# 	print("down x : %d | down y : %d | block : %d" %(down_x, down_y, blocks[down_y][down_x]))
+				# 	# print("down x : %d | down y : %d | block : %d" %(down_x, down_y, blocks[down_y][down_x]))
 				if center_y < 12 and blocks[center_y][center_x] == 10:
 					if down_y == center_y + 1 and blocks[down_y][down_x] > -1:
 						return False
