@@ -12,7 +12,8 @@ class Soilder(object):
 		self.x_pos = Screen.margin // 2 + x_pos
 		self.y_pos = Screen.margin // 2 + y_pos
 		self.speed = 4
-		self.dir = 'down'
+		self.dirs = ['left', 'right', 'up', 'down']
+		self.dir = self.dirs[randrange(0, 4)]
 		self.init_imgs()
 		self.rect = self.move_imgs[0].get_rect()
 		self.dir_time = 0
@@ -105,7 +106,7 @@ class Soilder(object):
 					else:
 						self.x_pos -= self.speed
 				if self.dir == 'right':
-					if (x + 1) // 40 > 13 or Map.stages[stage_num][1][y // 40][(x + 1 + 37) // 40] > -1:
+					if (x + 1) // 40 > 13 or Map.stages[stage_num][1][y // 40][(x + 1 + 40) // 40] > -1:
 						# print('right serach move')
 						self.dir = self.search_valid_move(stage_num)
 					else:
@@ -139,12 +140,12 @@ class Boss(object):
 		self.y_pos = 80 +  Screen.margin // 2
 		self.die_flag = False
 		self.die_idx = 0
-		self.health = 10
+		self.health = 2
 		self.move_idx = 0
-		self.speed = 4
+		self.speed = 3
 		self.move_flag = True
-		self.dir = 'down'
 		self.dirs = ['left', 'right', 'up', 'down']
+		self.dir = self.dirs[randrange(0, 4)]
 		self.dir_time = 0
 		self.img = None
 		self.init_imgs()

@@ -276,7 +276,7 @@ class CharacterAnimation(object):
 					return False
 				elif blocks[right_y][right_x] > -1:
 					return False
-				elif (self.y_pos + 22) // 40 <= 12 and self.y_pos >= -22:
+				elif self.y_pos > -22 and (self.y_pos + 22) // 40 <= 12 and self.x_pos >= -22 and (self.x_pos + 22) // 40 < 15:
 					if blocks[(self.y_pos + 22)//40][(self.x_pos + 22)//40] > -1: # 윗보정 - 우측 아래 블럭 확인
 						self.move_correction(down_x * 40, (down_y - 1) * 40 + 13, 'right', 'up') # 윗보정
 						return True
