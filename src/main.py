@@ -45,7 +45,8 @@ balloon_explode_sound = pygame.mixer.Sound(sound_path + 'balloon_explosion.mp3')
 bomb_boom_sound = pygame.mixer.Sound(sound_path + 'bomb_explosion.mp3')
 drop_bomb_sound = pygame.mixer.Sound(sound_path + 'dropBomb.mp3')
 gamestart_sound = pygame.mixer.Sound(sound_path + 'game_start.mp3')
-
+mainmenu_bgm = pygame.mixer.Sound(sound_path + 'mainmenu.mp3')
+mainmenu_bgm.play()
 
 # font
 BLACK = (0, 0, 0)
@@ -91,6 +92,7 @@ while running:
 			running = False
 		if event.type == pygame.KEYDOWN:
 			if stage_num < 0:
+				mainmenu_bgm.stop()
 				gamestart_sound.play()
 				# stage_num = 2 #이거 주석 풀면 보스
 				# soilders = [] # 보스 바로가기
@@ -144,7 +146,6 @@ while running:
 	if stage_num < 0:
 		screen.window.blit(screen.main_logo, (175, 50))
 		screen.window.blit(start_msg, (85, 450))
-		
 	elif 0 <= stage_num < 3:
 		for y in range(13):
 			for x, tile_idx in enumerate(stage.stages[stage_num][0][y]):
