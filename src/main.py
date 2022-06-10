@@ -46,6 +46,12 @@ bomb_boom_sound = pygame.mixer.Sound(sound_path + 'bomb_explosion.mp3')
 drop_bomb_sound = pygame.mixer.Sound(sound_path + 'dropBomb.mp3')
 gamestart_sound = pygame.mixer.Sound(sound_path + 'game_start.mp3')
 
+
+# font
+BLACK = (0, 0, 0)
+font = pygame.font.Font(asset_path + 'font/KFN.ttf', 30)
+start_msg = font.render('Press any key to start game', True, BLACK)
+
 # for img test #
 
 character = CharacterAnimation('../asset/character/animation.png')
@@ -133,6 +139,8 @@ while running:
 	# 타일 깔기
 	if stage_num < 0:
 		screen.window.blit(screen.main_logo, (175, 50))
+		screen.window.blit(start_msg, (85, 450))
+		
 	elif 0 <= stage_num < 3:
 		for y in range(13):
 			for x, tile_idx in enumerate(stage.stages[stage_num][0][y]):
@@ -472,9 +480,11 @@ while running:
 				if stage_num == 1:
 					soilders = [Soilder(asset_path + 'monster/soilder_sprite.png', x, y) for x, y in stage2_soilder_pos]
 					bombs = []
+					explosions = []
 				elif stage_num == 2:
 					soilders = []
 					bombs = []
+					explosions = []
 				character.default_character_state(stage_num)
 		if character.die_idx >= 6:
 			running = False
