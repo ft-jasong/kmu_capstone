@@ -49,9 +49,13 @@ gamestart_sound = pygame.mixer.Sound(sound_path + 'game_start.mp3')
 
 # font
 BLACK = (0, 0, 0)
+SKYBLUE = (135,206,235)
+PINK = (255,192,203)
+msg = None
 font = pygame.font.Font(asset_path + 'font/KFN.ttf', 30)
 start_msg = font.render('Press any key to start game', True, BLACK)
-
+game_clear_msg = font.render('GAME CLEAR', True, SKYBLUE)
+game_over_msg = font.render('GAME OVER', True, PINK)
 # for img test #
 
 character = CharacterAnimation('../asset/character/animation.png')
@@ -465,6 +469,7 @@ while running:
 		
 		if stage_num == 2 and boss.die_flag is True:
 			if boss.die_idx >= 4:
+				msg = game_clear_msg
 				running = False
 			else:
 				boss.die_animation()
@@ -489,4 +494,11 @@ while running:
 		if character.die_idx >= 6:
 			running = False
 	pygame.display.update()
+# bg_center = screen.background.get_rect(center=(int(screen.width + screen.margin) / 2, int((screen.height + screen.margin) / 4)))
+if msg == None:
+	msg = game_over_msg
+msg_rect = msg.get_rect(center = (int(screen.width + screen.margin) / 2, int((screen.height + screen.margin) / 2)))
+screen.window.blit(msg, msg_rect)
+pygame.display.update()
+pygame.time.delay(2000)
 pygame.quit()
